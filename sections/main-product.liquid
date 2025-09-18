@@ -46,6 +46,8 @@
     <script src="{{ 'price-per-item.js' | asset_url }}" defer="defer"></script>
   {%- endif -%}
 
+  <script src="{{ 'bundle-card.js' | asset_url }}" defer="defer"></script>
+
   {% if section.settings.image_zoom == 'hover' %}
     <script id="EnableZoomOnHover-main" src="{{ 'magnify.js' | asset_url }}" defer="defer"></script>
   {% endif %}
@@ -471,6 +473,7 @@
                   section_id: section.id,
                   show_pickup_availability: true
                 -%}
+                {% render 'bundle-card', bundle_product: section.settings.bundle_product %}
               {%- when 'rating' -%}
                 {%- if product.metafields.reviews.rating.value != blank -%}
                   <div class="rating-wrapper">
@@ -723,6 +726,8 @@
     </script>
   </div>
 </product-info>
+
+
 
 {% schema %}
 {
@@ -2075,6 +2080,11 @@
     }
   ],
   "settings": [
+    {
+      "type": "product",
+      "id": "bundle_product",
+      "label": "Bundle Product"
+    },
     {
       "type": "checkbox",
       "id": "enable_sticky_info",
