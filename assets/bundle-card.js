@@ -160,8 +160,8 @@ attachAddToCart() {
         const firstVariantId = productData.variants[0].id;
 
         const items = [
-          { id: firstVariantId, quantity: 1 },
-          { id: this.currentVariantId, quantity: 1 }
+          { id: firstVariantId, quantity: 1, properties: { commonId: this.currentVariantId, isBundle: true} },
+          { id: this.currentVariantId, quantity: 1, properties: { commonId: this.currentVariantId, isBundle: true}}
         ];
 
         return fetch('/cart/add.js', {
@@ -171,13 +171,27 @@ attachAddToCart() {
         });
       })
       .then(res => res.json())
-      .then(data => {
-        publish(PUB_SUB_EVENTS.cartUpdate, { 
-          source: 'quick-add', 
-          cartData: data, 
-          variantId: this.currentVariantId 
-        });
-      })
+      .then(() => {
+          const popupCart = document.querySelector('cart-notification');
+          if (!popupCart) {
+            console.warn('popup cart element not found');
+            return;
+          }
+
+          fetch(`/?sections=cart-notification-product,cart-notification-button,cart-icon-bubble`)
+            .then(res => res.json())
+            .then(sections => {
+              fetch(`${window.Shopify.routes.root}cart.js`)
+                .then(res => res.json())
+                .then(cartState => {
+                  const lastItem = cartState.items[cartState.items.length - 1];
+                  popupCart.renderContents({
+                    key: lastItem.key,
+                    sections: sections
+                  });
+                });
+            });
+        })
       .catch(err => console.error('❌ Add to cart failed:', err));
   });
 }
