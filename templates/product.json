@@ -67,6 +67,7 @@
         "share"
       ],
       "settings": {
+        "bundle_product": "t-shirt",
         "enable_sticky_info": true,
         "color_scheme": "scheme-1",
         "media_size": "large",
