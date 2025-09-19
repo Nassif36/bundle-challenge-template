@@ -160,8 +160,8 @@ attachAddToCart() {
         const firstVariantId = productData.variants[0].id;
 
         const items = [
-          { id: firstVariantId, quantity: 1 },
-          { id: this.currentVariantId, quantity: 1 }
+          { id: firstVariantId, quantity: 1, properties: { commonId: this.currentVariantId, isBundle: true} },
+          { id: this.currentVariantId, quantity: 1, properties: { commonId: this.currentVariantId, isBundle: true}}
         ];
 
         return fetch('/cart/add.js', {
