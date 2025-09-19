@@ -15,6 +15,28 @@
 		background: #fff;
 	}
 
+  .swiper-button-prev,
+  .swiper-button-next {
+    color: #fff !important;
+    fill: #fff !important;
+    padding: 1em;
+    background: rgba(0,0,0,0.18);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    transition: background 0.2s;
+  }
+  .swiper-button-prev:hover,
+  .swiper-button-next:hover {
+    background: rgba(0,0,0,0.32);
+  }
+  .swiper-button-prev:after,
+  .swiper-button-next:after {
+    color: #fff !important;
+    font-size: 22px !important;
+  }
   .bundle-card__info {
     width: 100%;
     padding: 0 .8em;
@@ -59,6 +81,7 @@
     width: 100%;
     margin: .5em 0;
   }
+
 </style>
 
 
@@ -83,7 +106,7 @@
       <div class="swiper-button-next"></div>
     </div>
     <div class="bundle-card__info">
-      <h3>{{ bundle_item.title }}</h3>
+      <h3 aria-label="{{ bundle_item.title }}">{{ bundle_item.title }}</h3>
       <p class="bundle-card__price">{{ bundle_item.price | money }}</p>
       {%- if bundle_item.options_with_values.size > 0 -%}
         <div class="bundle-card__variants">
@@ -102,7 +125,7 @@
                         {%- break -%}
                       {%- endif -%}
                     {%- endfor -%}
-                    <label class="bundle-card__swatch{% unless swatch_variant.available %} disabled{% endunless %}" style="background: {{ value | downcase }};" data-featured-media-id="{{ swatch_variant.featured_media.id }}" data-variant-id="{{ swatch_variant.id }}">
+                    <label class="bundle-card__swatch{% unless swatch_variant.available %} disabled{% endunless %}" style="background: {{ value | downcase }};" data-featured-media-id="{{ swatch_variant.featured_media.id }}" data-variant-id="{{ swatch_variant.id }}" aria-label="Pick {{ value | escape }} color">
                       <input type="radio" name="option-{{ option.position }}" value="{{ value | escape }}" class="visually-hidden" {% unless swatch_variant.available %}disabled{% endunless %}>
                       <span class="visually-hidden">{{ value }}</span>
                     </label>
@@ -114,7 +137,7 @@
                         {%- break -%}
                       {%- endif -%}
                     {%- endfor -%}
-                    <label class="bundle-card__size-pill{% unless size_variant.available %} disabled{% endunless %}">
+                    <label class="bundle-card__size-pill{% unless size_variant.available %} disabled{% endunless %}" aria-label="Size {{ value | escape }}">
                       <input type="radio" name="option-{{ option.position }}" value="{{ value | escape }}" class="visually-hidden" {% unless size_variant.available %}disabled{% endunless %}>
                       {{ value }}
                     </label>
@@ -134,7 +157,7 @@
   </div>
 {%- endif -%}
 
-<button class="bundle-card__add-to-cart button--tertiary">Add to Cart</button>
+<button class="bundle-card__add-to-cart button" aria-label="Add to cart">Add to Cart</button>
 </bundle-card>
 
 
