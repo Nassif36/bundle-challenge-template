@@ -3,6 +3,7 @@
 
 {%- assign bundle_item = bundle_product -%}
 
+{%- if bundle_item -%}
 <style>
   .bundle-card {
     display: flex;
@@ -87,7 +88,6 @@
 
 
 <bundle-card>
-{%- if bundle_item -%}
   <div class="bundle-card">
     <!-- Hidden variant stock info for JS -->
     {%- for variant in bundle_item.variants -%}
@@ -155,9 +155,9 @@
       {%- endif -%}
     </div>
   </div>
-{%- endif -%}
+
 
 <button class="bundle-card__add-to-cart button" aria-label="Add to cart">Add to Cart</button>
 </bundle-card>
-
+{%- endif -%}
 
