@@ -1,3 +1,5 @@
+0. Used shopify theme dev --store="example.myshopify.com" could be shopify login --store "example.myshopify.com" then shopify theme serve depending your CLI version
+
 1. Open Preview
 
 Open the store preview to begin testing the T-Shirt product flow.
