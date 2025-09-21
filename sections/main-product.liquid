@@ -473,7 +473,8 @@
                   section_id: section.id,
                   show_pickup_availability: true
                 -%}
-                {% render 'bundle-card', bundle_product: section.settings.bundle_product %}
+                {% render 'bundle-card', bundle_product: product.metafields.custom.bundle_product.value %}
+            
               {%- when 'rating' -%}
                 {%- if product.metafields.reviews.rating.value != blank -%}
                   <div class="rating-wrapper">
@@ -2080,11 +2081,6 @@
     }
   ],
   "settings": [
-    {
-      "type": "product",
-      "id": "bundle_product",
-      "label": "Bundle Product"
-    },
     {
       "type": "checkbox",
       "id": "enable_sticky_info",
