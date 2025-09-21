@@ -45,7 +45,7 @@
     <script src="{{ 'show-more.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'price-per-item.js' | asset_url }}" defer="defer"></script>
   {%- endif -%}
-  {% if section.settings.bundle_product %}
+  {% if product.metafields.custom.bundle_product.value %}
     <script src="{{ 'bundle-card.min.js' | asset_url }}" defer="defer"></script>
   {% endif %}
   {% if section.settings.image_zoom == 'hover' %}
