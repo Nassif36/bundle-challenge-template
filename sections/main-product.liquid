@@ -45,7 +45,9 @@
     <script src="{{ 'show-more.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'price-per-item.js' | asset_url }}" defer="defer"></script>
   {%- endif -%}
-
+  {% if product.metafields.custom.bundle_product.value %}
+    <script src="{{ 'bundle-card.min.js' | asset_url }}" defer="defer"></script>
+  {% endif %}
   {% if section.settings.image_zoom == 'hover' %}
     <script id="EnableZoomOnHover-main" src="{{ 'magnify.js' | asset_url }}" defer="defer"></script>
   {% endif %}
@@ -471,6 +473,9 @@
                   section_id: section.id,
                   show_pickup_availability: true
                 -%}
+                {% if product.metafields.custom.bundle_product.value %}
+                  {% render 'bundle-card', bundle_product: product.metafields.custom.bundle_product.value %}
+                {% endif %}
               {%- when 'rating' -%}
                 {%- if product.metafields.reviews.rating.value != blank -%}
                   <div class="rating-wrapper">
@@ -723,6 +728,8 @@
     </script>
   </div>
 </product-info>
+
+
 
 {% schema %}
 {

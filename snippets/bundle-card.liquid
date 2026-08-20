@@ -1,0 +1,163 @@
+
+
+
+{%- assign bundle_item = bundle_product -%}
+
+{%- if bundle_item -%}
+<style>
+  .bundle-card {
+    display: flex;
+  }
+
+	.swiper-slide {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: #fff;
+	}
+
+  .swiper-button-prev,
+  .swiper-button-next {
+    color: #fff !important;
+    fill: #fff !important;
+    padding: 1em;
+    background: rgba(0,0,0,0.18);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    transition: background 0.2s;
+  }
+  .swiper-button-prev:hover,
+  .swiper-button-next:hover {
+    background: rgba(0,0,0,0.32);
+  }
+  .swiper-button-prev:after,
+  .swiper-button-next:after {
+    color: #fff !important;
+    font-size: 22px !important;
+  }
+  .bundle-card__info {
+    width: 100%;
+    padding: 0 .8em;
+  }
+  	.bundle-card__price,
+  .bundle-card__info h3 {
+    margin: 0;
+  }
+  .bundle-card__variants {
+    padding: .8em 0;
+  }
+  .bundle-card__option-size,
+  .bundle-card__options-values {
+    padding: 0 .5em
+  }
+  .bundle-card__swatch {
+    border: 1px solid #ccc; 
+    border-radius: 100%; 
+    width: 25px; 
+    height: 25px; 
+    display: inline-block;
+    margin-right: 8px; 
+    cursor: pointer;
+  }
+    .bundle-card__swatch.selected {
+      border-color: #121212;
+    }
+  .bundle-card__size-pill {
+    display:inline-block; 
+    padding:1px 6px; 
+    border: 1px solid #ccc; 
+    border-radius:5px; 
+    margin: 0 2px;
+    cursor:pointer;
+  }
+
+  .bundle-card__size-pill.selected {
+    background: #121212;
+    color: #fff;
+  }
+  .bundle-card__add-to-cart {
+    width: 100%;
+    margin: .5em 0;
+  }
+
+</style>
+
+
+<bundle-card>
+  <h2>Best Paired With</h2>
+  <div class="bundle-card">
+    <!-- Hidden variant stock info for JS -->
+    {%- for variant in bundle_item.variants -%}
+      <input type="hidden" class="bundle-card__variant-stock" data-variant-id="{{ variant.id }}" data-available="{{ variant.available }}" data-color="{{ variant.option1 | escape }}" data-size="{{ variant.option2 | escape }}" />
+    {%- endfor -%}
+  <input type="hidden" class="bundle-single_product" value="{{ product.url }}" />
+    <div class="swiper bundle-card-swiper">
+      <div class="swiper-wrapper">
+        {%- for media in bundle_item.media -%}
+          <div class="swiper-slide" data-media-id="{{ media.id }}" data-featured-media-id="{{ media.id }}">
+            <img class="bundle-card__image" src="{{ media | image_url: width: 200 }}" alt="{{ media.alt | escape }}" loading="lazy" />
+          </div>
+        {%- endfor -%}
+      </div>
+      <div class="swiper-button-prev"></div>
+      <div class="swiper-button-next"></div>
+    </div>
+    <div class="bundle-card__info">
+      <h3 aria-label="{{ bundle_item.title }}">{{ bundle_item.title }}</h3>
+      <p class="bundle-card__price">{{ bundle_item.price | money }}</p>
+      {%- if bundle_item.options_with_values.size > 0 -%}
+        <div class="bundle-card__variants">
+          {%- for option in bundle_item.options_with_values -%}
+            <div class="bundle-card__option">
+              <span class="bundle-card__option-label">{{ option.name }}:</span>
+              <div class="bundle-card__options-values">
+
+                {%- for value in option.values -%}
+                  {%- assign option_name_downcase = option.name | downcase -%}
+                  {%- if option_name_downcase == 'color' or option_name_downcase == 'colour' -%}
+                    {%- assign swatch_variant = nil -%}
+                    {%- for variant in bundle_item.variants -%}
+                      {%- if variant.option1 == value -%}
+                        {%- assign swatch_variant = variant -%}
+                        {%- break -%}
+                      {%- endif -%}
+                    {%- endfor -%}
+                    <label class="bundle-card__swatch{% unless swatch_variant.available %} disabled{% endunless %}" style="background: {{ value | downcase }};" data-featured-media-id="{{ swatch_variant.featured_media.id }}" data-variant-id="{{ swatch_variant.id }}" aria-label="Pick {{ value | escape }} color">
+                      <input type="radio" name="option-{{ option.position }}" value="{{ value | escape }}" class="visually-hidden" {% unless swatch_variant.available %}disabled{% endunless %}>
+                      <span class="visually-hidden">{{ value }}</span>
+                    </label>
+                  {%- elsif option_name_downcase == 'size' -%}
+                    {%- assign size_variant = nil -%}
+                    {%- for variant in bundle_item.variants -%}
+                      {%- if variant.option2 == value -%}
+                        {%- assign size_variant = variant -%}
+                        {%- break -%}
+                      {%- endif -%}
+                    {%- endfor -%}
+                    <label class="bundle-card__size-pill{% unless size_variant.available %} disabled{% endunless %}" aria-label="Size {{ value | escape }}">
+                      <input type="radio" name="option-{{ option.position }}" value="{{ value | escape }}" class="visually-hidden" {% unless size_variant.available %}disabled{% endunless %}>
+                      {{ value }}
+                    </label>
+                  {%- else -%}
+                    <label class="bundle-card__size-pill">
+                      <input type="radio" name="option-{{ option.position }}" value="{{ value | escape }}" class="visually-hidden">
+                      {{ value }}
+                    </label>
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+
+
+<button class="bundle-card__add-to-cart button" aria-label="Add to cart">Add to Cart</button>
+</bundle-card>
+{%- endif -%}
+
